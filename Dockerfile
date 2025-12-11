@@ -1,29 +1,27 @@
-# Use a Python base image optimized for small size
+# 1. Use slim python image (Debian based, small footprint)
 FROM python:3.11-slim
 
-# Set working directory inside the container
+# 2. Set working directory
 WORKDIR /app
 
-# Ensure that the Firebase Admin SDK can access credentials via environment variable
-# The application code will look for this variable
+# Ensure Firebase credentials work
 ENV FIREBASE_CREDENTIALS_JSON=$FIREBASE_CREDENTIALS_JSON
 
-# Copy requirements file first to take advantage of Docker caching
-COPY requirements.txt .
+# 3. CRITICAL STEP: Install CPU-Only PyTorch first
+# This prevents pip from downloading the 5GB NVIDIA CUDA version
+# We use the official PyTorch CPU wheel index
+RUN pip install --no-cache-dir torch==2.2.0 --index-url https://download.pytorch.org/whl/cpu
 
-# Install dependencies (no-cache-dir keeps the final image smaller)
+# 4. Install the rest of the dependencies
+COPY requirements.txt .
 RUN pip install --no-cache-dir --upgrade -r requirements.txt
 
-# Copy application source code
+# 5. Copy App Code
 COPY app/ app/
 
-# --- Model Pre-warming (Speeds up deployment) ---
-# This downloads the model during the BUILD phase so the server starts fast.
+# 6. Pre-warm the Model (Downloads ~200MB model to cache)
 RUN python -c "from sentence_transformers import SentenceTransformer; SentenceTransformer('all-MiniLM-L6-v2')"
 
-# Expose the port (Standard for cloud platforms)
+# 7. Network Configuration
 EXPOSE 8080
-
-# Command to run the application (uvicorn)
-# Binds to the port defined in the environment (8080)
 CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8080"]
