@@ -4,6 +4,8 @@ service-account.json
 *.pem
 *.key
 
+#venv
+realxreal-embedding-env
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
