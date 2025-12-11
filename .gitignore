@@ -1,7 +1,31 @@
+# Secrets (CRITICAL)
+firebase-credentials.json
+service-account.json
+*.pem
+*.key
+
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]
 *$py.class
+
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.env
+
+
+
+# Model Cache (Don't commit the AI weights, we download them on build)
+model_cache/
+.cache/
+
+# OS
+.DS_Store
 
 # C extensions
 *.so
