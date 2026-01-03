@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  embedding-service:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    container_name: realxreal-embedding
+    ports:
+      - "8080:8080"
+    environment:
+      # Passes your local shell variable to the container
+      - FIREBASE_CREDENTIALS_JSON=${FIREBASE_CREDENTIALS_JSON} 
+      - ENVIRONMENT=development
+      - ALLOWED_ORIGINS=*
+    # performance tuning constraints (optional, simulates 2 vCPU limit)
+    deploy:
+      resources:
+        limits:
+          cpus: '2.00'
+          memory: 2G
+    # If you want to edit code without rebuilding, uncomment the next two lines:
+    # volumes:
+    #   - ./app:/app/app
