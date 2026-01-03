@@ -1,7 +1,7 @@
 ```markdown
 # realxreal-embedding-server
 
-The **realxreal embedding server** is a secure, authenticated microservice for generating text embeddings without exposing your API keys. It allows you to open-source your code while protecting your cloud credits and user data.
+The **realxreal embedding server** is a secure, authenticated microservice for generating text embeddings without exposing your API keys. It allows you to open-source your code while protecting your cloud credits and user data. This is used for the realxreal iOS app.
 
 ---
 
